@@ -1,0 +1,25 @@
+#include <Servo.h>            // Include the Servo library
+
+Servo myServo;                // Create a Servo object
+
+void setup() {
+  Serial.begin(9600);         // Start serial communication at 9600 baud
+  myServo.attach(9);          // Attach the servo to pin 9
+  Serial.println("Type angle (0–180) to move the servo:");
+}
+
+void loop() {
+  if (Serial.available()) {   // Check if data was sent over Serial
+    String input = Serial.readStringUntil('\n'); // Read until newline
+    input.trim();             // Remove any whitespace (like \r or spaces)
+    int angle = input.toInt(); // Convert the string to an integer
+
+    if (angle >= 0 && angle <= 180) {    // Check if the angle is valid
+      myServo.write(angle);             // Move servo to that angle
+      Serial.print("Moved to: ");
+      Serial.println(angle);
+    } else {
+      Serial.println("Invalid angle. Enter 0 to 180.");
+    }
+  }
+}
